@@ -3,7 +3,8 @@ include 'php/koneksi.php';
 $ekonomi = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita where kategori='ekonomi'"));
 $olahraga = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita where kategori='olahraga'"));	
 $teknologi = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita where kategori='teknologi'"));	
-$entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita where kategori='entertainment'"));	
+$entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita where kategori='entertainment'"));
+$beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita"));
 ?>
 <!DOCTYPE html>
 <html>
@@ -69,43 +70,6 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 				<h1 class="page-header">Dashboard</h1>
 			</div>
 		</div><!--/.row-->
-		
-		<div class="panel panel-container">
-			<div class="row">
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-teal panel-widget border-right">
-						<div class="row no-padding"><em class="fa fa-xl fa-money color-teal"></em>
-							<div class="large"><?php echo $ekonomi['jumlah']; ?></div>
-							<div class="text-muted">Ekonomi</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-blue panel-widget border-right">
-						<div class="row no-padding"><em class="fa fa-xl fa-futbol-o color-blue"></em>
-							<div class="large"><?php echo $olahraga['jumlah']; ?></div>
-							<div class="text-muted">Olahraga</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-orange panel-widget border-right">
-						<div class="row no-padding"><em class="fa fa-xl fa-power-off color-red"></em>
-							<div class="large"><?php echo $teknologi['jumlah']; ?></div>
-							<div class="text-muted">Teknologi</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-red panel-widget ">
-						<div class="row no-padding"><em class="fa fa-xl fa-users color-orange"></em>
-							<div class="large"><?php echo $entertainment['jumlah']; ?></div>
-							<div class="text-muted">Entertainment</div>
-						</div>
-					</div>
-				</div>
-			</div><!--/.row-->
-		</div>
 
 		<div class="row">
 			<div class="col-md-12">
@@ -143,15 +107,11 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Tabel Berita
+						Tabel Berita <b>(<?php echo $beritaTotal['jumlah'];?>)</b>
 						<!--<span class="pull-right clickable panel-toggle panel-button-tab-left">
 							<em class="fa fa-toggle-up"></em>
 						</span>-->
-						<span class="pull-right">
-							<form action="php/craw.php" onsubmit="return confirm('Semua Data Pada Tabel Akan Hilang');" method="post">
-								<input type="submit" name="reset" class="btn btn-warning" value="Reset Tabel">
-							</form>
-						</span>
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
 					</div>
 					<div class="panel-body">
 						<table id="dataTable" class="display dataTable" role="grid" aria-describedby="example_info" style="width: 100%;" width="100%" cellspacing="0">
@@ -172,7 +132,6 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
                       				<th>Judul</th>
                       				<th>Isi</th>
                       				<th>Kategori</th>
-                      				<th>Tanggal Crawl</th>
                     			</tr>
                   			</tfoot>
                   			<tbody>
@@ -181,27 +140,88 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 		            			$data = mysqli_query($koneksi,"select * from tb_berita order by tgl_ambil desc");
 		            			while($d = mysqli_fetch_array($data)){
 			      			?>
-                    			<tr>
-                      				<td><?php echo $no++; ?></td>
+								<!-- Modal -->
+								<div class="modal fade" id="myModal-<?php echo $no; ?>" role="dialog">
+    								<div class="modal-dialog">
+    							  		<!-- Modal content-->
+    							  		<div class="modal-content">
+    							    		<div class="modal-header">
+    							      			<button type="button" class="close" data-dismiss="modal">&times;</button>
+    							      			<h4 class="modal-title"><?php echo $d['judul']; ?></h4>
+    							    		</div>
+    							    		<div class="modal-body">
+    							     			<p><?php echo $d['isi']; ?></p>
+    							    		</div>
+    							    		<div class="modal-footer">
+												<form action="php/aksi.php" method="post">
+													<input type="text" name="id" hidden value="<?php echo $d['id']; ?>">
+													<input type="submit" name="hapus" class="btn btn-danger" value="Hapus">
+												</form>
+    							    		</div>
+    							  		</div>
+									</div>
+								</div>
+                    			<tr data-toggle="modal" data-target="#myModal-<?php echo $no; ?>">
+                      				<td><?php echo $no; ?></td>
                       				<td><?php echo $d['url']; ?></td>
                       				<td><?php echo $d['judul']; ?></td>
                       				<td><?php echo substr(strip_tags($d['isi']), 0, 256); ?>.......</td>
                       				<td><?php echo $d['kategori']; ?></td>
                       				<td><?php echo $d['tgl_ambil']; ?></td>
                     			</tr>
-                   			<?php }?>
+							<?php 
+								$no++;
+								}
+							?>
                   			</tbody>
                 		</table>
 					</div>
 				</div>
 			</div>
 		</div><!--/.row-->
+
+		<div class="panel panel-container">
+			<div class="row">
+				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+					<div class="panel panel-teal panel-widget border-right">
+						<div class="row no-padding"><em class="fa fa-xl fa-money color-teal"></em>
+							<div class="large"><?php echo $ekonomi['jumlah']; ?></div>
+							<div class="text-muted">Ekonomi</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+					<div class="panel panel-blue panel-widget border-right">
+						<div class="row no-padding"><em class="fa fa-xl fa-futbol-o color-blue"></em>
+							<div class="large"><?php echo $olahraga['jumlah']; ?></div>
+							<div class="text-muted">Olahraga</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+					<div class="panel panel-orange panel-widget border-right">
+						<div class="row no-padding"><em class="fa fa-xl fa-power-off color-red"></em>
+							<div class="large"><?php echo $teknologi['jumlah']; ?></div>
+							<div class="text-muted">Teknologi</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+					<div class="panel panel-red panel-widget ">
+						<div class="row no-padding"><em class="fa fa-xl fa-users color-orange"></em>
+							<div class="large"><?php echo $entertainment['jumlah']; ?></div>
+							<div class="text-muted">Entertainment</div>
+						</div>
+					</div>
+				</div>
+			</div><!--/.row-->
+		</div>
 									
 		<div class="col-sm-12">
 			<p class="back-link">Lumino Theme by <a href="https://www.medialoot.com">Medialoot</a></p>
 		</div>
 	</div>	<!--/.main-->
-	
+
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/chart.min.js"></script>

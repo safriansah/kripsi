@@ -13,6 +13,13 @@ class crawl{
 		$this->koneksi = mysqli_connect($host, $user, $pass, $db);
     }
     
+    function hapusBerita($id){
+        $query="delete from tb_berita where id='$id'";
+        $hasil="data gagal dihapus";
+        if(mysqli_query($this->koneksi, $query)) $hasil="data berhasil dihapus";
+        return $hasil;
+    }
+
     function crawlBerita($kategori){
         $this->kategori=$kategori;
         $this->existUrl="";
