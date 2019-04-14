@@ -107,7 +107,7 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Tabel Berita <b>(<?php echo $beritaTotal['jumlah'];?>)</b>
+						Tabel Berita
 						<!--<span class="pull-right clickable panel-toggle panel-button-tab-left">
 							<em class="fa fa-toggle-up"></em>
 						</span>-->
@@ -123,6 +123,7 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
                       				<th>Isi</th>
                       				<th>Kategori</th>
                       				<th>Tanggal Crawl</th>
+									<th>Opsi</th>
                     			</tr>
                   			</thead>
                   			<tfoot>
@@ -132,6 +133,7 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
                       				<th>Judul</th>
                       				<th>Isi</th>
                       				<th>Kategori</th>
+									<th>Opsi</th>
                     			</tr>
                   			</tfoot>
                   			<tbody>
@@ -153,21 +155,29 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
     							     			<p><?php echo $d['isi']; ?></p>
     							    		</div>
     							    		<div class="modal-footer">
-												<form action="php/aksi.php" method="post">
-													<input type="text" name="id" hidden value="<?php echo $d['id']; ?>">
-													<input type="submit" name="hapus" class="btn btn-danger" value="Hapus">
-												</form>
+												<?php echo $d['tgl_ambil']; ?>
     							    		</div>
     							  		</div>
 									</div>
 								</div>
-                    			<tr data-toggle="modal" data-target="#myModal-<?php echo $no; ?>">
+                    			<tr>
                       				<td><?php echo $no; ?></td>
-                      				<td><?php echo $d['url']; ?></td>
+                      				<td><a target="_blank" href="<?php echo $d['url']; ?>"><?php echo substr(strip_tags($d['url']), 0, 64); ?>...</a></td>
                       				<td><?php echo $d['judul']; ?></td>
-                      				<td><?php echo substr(strip_tags($d['isi']), 0, 256); ?>.......</td>
+                      				<td><?php echo substr(strip_tags($d['isi']), 0, 128); ?>.......</td>
                       				<td><?php echo $d['kategori']; ?></td>
                       				<td><?php echo $d['tgl_ambil']; ?></td>
+                      				<td style="text-align:center">
+									  	<button style="margin:6px" class="btn btn-primary" data-toggle="modal" data-target="#myModal-<?php echo $no; ?>">
+									  		<i class="fa fa-eye" aria-hidden="true"></i>
+										</button>
+										<form action="php/aksi.php" method="post" onsubmit="return confirm('Hapus data berita <?php echo $d['judul'];?>');">
+											<input type="text" name="id" hidden value="<?php echo $d['id']; ?>">
+											<button style="margin:6px" class="btn btn-danger" name="hapus" type="submit" value="hapus">
+									  			<i class="fa fa-trash" aria-hidden="true"></i>
+											</button>
+										</form>
+									</td>
                     			</tr>
 							<?php 
 								$no++;

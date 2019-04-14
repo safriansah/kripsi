@@ -15,9 +15,12 @@ class crawl{
     
     function hapusBerita($id){
         $query="delete from tb_berita where id='$id'";
-        $hasil="data gagal dihapus";
-        if(mysqli_query($this->koneksi, $query)) $hasil="data berhasil dihapus";
-        return $hasil;
+        $hasil="Data gagal dihapus";
+        if(mysqli_query($this->koneksi, $query)) $hasil="Data berhasil dihapus";
+        echo (" <script>
+                    window.alert('$hasil');
+                    window.location.href='../neo.php';
+                </script>");
     }
 
     function crawlBerita($kategori){
@@ -33,13 +36,19 @@ class crawl{
         else if($kategori=="teknologi") $this->kategoriUrl="https://tekno.kompas.com/search/all/";
         else if($kategori=="entertainment") $this->kategoriUrl="https://entertainment.kompas.com/search/all/";
         
-        if($kategori=="ekonomi") $this->getEkonomi(1, 1);
-        else $this->getUrl(1, 1);
+        if($kategori=="ekonomi") $hasil=$this->getEkonomi();
+        else $hasil=$this->getUrl();
+        echo (" <script>
+                    window.alert('Berhasil mendapatkan $hasil berita pada kategori $kategori');
+                    window.location.href='../neo.php';
+                </script>");
     }
 
-    function getUrl($halaman, $jumlah){
+    function getUrl(){
+        $halaman=1;
+        $jumlah=0;
         while($jumlah<10){
-            $kodeHTML =  file_get_contents($this->kategoriUrl);
+            $kodeHTML =  file_get_contents($this->kategoriUrl.$halaman);
             $pecah = explode('<a class="article__link" href="', $kodeHTML);
             $i=0;
             foreach($pecah as $a){
@@ -56,6 +65,7 @@ class crawl{
             }
             $halaman+=1;
         }
+        return $jumlah;
     }
 
     function cekKata($string, $kata){
@@ -93,9 +103,11 @@ class crawl{
         return $query;
     }
 
-    function getEkonomi($halaman, $jumlah){
+    function getEkonomi(){
+        $halaman=1;
+        $jumlah=0;
         while($jumlah<10){
-            $kodeHTML =  file_get_contents($this->kategoriUrl);
+            $kodeHTML =  file_get_contents($this->kategoriUrl.$halaman);
             $pecah = explode('<div class="terkini__post">', $kodeHTML);
             $i=0;
             foreach($pecah as $a){
@@ -113,6 +125,7 @@ class crawl{
             }
             $halaman+=1;
         }
+        return $jumlah;
     }
     
 }
