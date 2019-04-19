@@ -71,6 +71,43 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
 			</div>
 		</div><!--/.row-->
 
+		<div class="panel panel-container">
+			<div class="row">
+				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+					<div class="panel panel-teal panel-widget border-right">
+						<div class="row no-padding"><em class="fa fa-xl fa-money color-teal"></em>
+							<div class="large"><?php echo $ekonomi['jumlah']; ?></div>
+							<div class="text-muted">Ekonomi</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+					<div class="panel panel-blue panel-widget border-right">
+						<div class="row no-padding"><em class="fa fa-xl fa-futbol-o color-blue"></em>
+							<div class="large"><?php echo $olahraga['jumlah']; ?></div>
+							<div class="text-muted">Olahraga</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+					<div class="panel panel-orange panel-widget border-right">
+						<div class="row no-padding"><em class="fa fa-xl fa-power-off color-red"></em>
+							<div class="large"><?php echo $teknologi['jumlah']; ?></div>
+							<div class="text-muted">Teknologi</div>
+						</div>
+					</div>
+				</div>
+				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
+					<div class="panel panel-red panel-widget ">
+						<div class="row no-padding"><em class="fa fa-xl fa-users color-orange"></em>
+							<div class="large"><?php echo $entertainment['jumlah']; ?></div>
+							<div class="text-muted">Entertainment</div>
+						</div>
+					</div>
+				</div>
+			</div><!--/.row-->
+		</div>
+
 		<div class="row">
 			<div class="col-md-12">
 				<div class="panel panel-default">
@@ -189,43 +226,6 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
 				</div>
 			</div>
 		</div><!--/.row-->
-
-		<div class="panel panel-container">
-			<div class="row">
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-teal panel-widget border-right">
-						<div class="row no-padding"><em class="fa fa-xl fa-money color-teal"></em>
-							<div class="large"><?php echo $ekonomi['jumlah']; ?></div>
-							<div class="text-muted">Ekonomi</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-blue panel-widget border-right">
-						<div class="row no-padding"><em class="fa fa-xl fa-futbol-o color-blue"></em>
-							<div class="large"><?php echo $olahraga['jumlah']; ?></div>
-							<div class="text-muted">Olahraga</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-orange panel-widget border-right">
-						<div class="row no-padding"><em class="fa fa-xl fa-power-off color-red"></em>
-							<div class="large"><?php echo $teknologi['jumlah']; ?></div>
-							<div class="text-muted">Teknologi</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-red panel-widget ">
-						<div class="row no-padding"><em class="fa fa-xl fa-users color-orange"></em>
-							<div class="large"><?php echo $entertainment['jumlah']; ?></div>
-							<div class="text-muted">Entertainment</div>
-						</div>
-					</div>
-				</div>
-			</div><!--/.row-->
-		</div>
 									
 		<div class="col-sm-12">
 			<p class="back-link">Lumino Theme by <a href="https://www.medialoot.com">Medialoot</a></p>
