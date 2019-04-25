@@ -1,9 +1,10 @@
 <?php 
-include 'php/koneksi.php'; 
-$ekonomi = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita where kategori='ekonomi'"));
-$olahraga = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita where kategori='olahraga'"));	
-$teknologi = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita where kategori='teknologi'"));	
-$entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM tb_berita where kategori='entertainment'"));	
+include 'php/koneksi.php';
+$ekonomi = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table where kategori='ekonomi'"));
+$olahraga = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table where kategori='olahraga'"));	
+$teknologi = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table where kategori='teknologi'"));	
+$entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table where kategori='entertainment'"));
+$beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table"));
 ?>
 <!DOCTYPE html>
 <html>
@@ -39,7 +40,7 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 	<div id="sidebar-collapse" class="col-sm-3 col-lg-2 sidebar">
 		<div class="profile-sidebar">
 			<div class="profile-userpic">
-				<img src="http://placehold.it/50/30a5ff/fff" class="img-responsive" alt="">
+				<img src="img/adm.png" class="img-responsive" alt="">
 			</div>
 			<div class="profile-usertitle">
 				<div class="profile-usertitle-name">Admin</div>
@@ -50,7 +51,7 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 		<div class="divider"></div>
 		<ul class="nav menu">
 			<li class="active"><a href="index.html"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
-			<li><a href="login.html"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
+			<!--<li><a href="login.html"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>-->
 		</ul>
 	</div><!--/.sidebar-->
 		
@@ -69,7 +70,7 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 				<h1 class="page-header">Dashboard</h1>
 			</div>
 		</div><!--/.row-->
-		
+
 		<div class="panel panel-container">
 			<div class="row">
 				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
@@ -114,7 +115,7 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 						Crawl Berita
 						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
 					<div class="panel-body">
-						<form action="php/craw.php" method="post">
+						<form action="php/aksi.php" method="post">
 						<div class="row">
 							<div class="col-md-12">
 								<label>Pilih Kategori:</label>
@@ -147,11 +148,7 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 						<!--<span class="pull-right clickable panel-toggle panel-button-tab-left">
 							<em class="fa fa-toggle-up"></em>
 						</span>-->
-						<span class="pull-right">
-							<form action="php/craw.php" onsubmit="return confirm('Semua Data Pada Tabel Akan Hilang');" method="post">
-								<input type="submit" name="reset" class="btn btn-warning" value="Reset Tabel">
-							</form>
-						</span>
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span>
 					</div>
 					<div class="panel-body">
 						<table id="dataTable" class="display dataTable" role="grid" aria-describedby="example_info" style="width: 100%;" width="100%" cellspacing="0">
@@ -163,6 +160,7 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
                       				<th>Isi</th>
                       				<th>Kategori</th>
                       				<th>Tanggal Crawl</th>
+									<th>Opsi</th>
                     			</tr>
                   			</thead>
                   			<tfoot>
@@ -172,24 +170,38 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
                       				<th>Judul</th>
                       				<th>Isi</th>
                       				<th>Kategori</th>
-                      				<th>Tanggal Crawl</th>
+									<th>Opsi</th>
                     			</tr>
                   			</tfoot>
                   			<tbody>
                   			<?php
 		            			$no = 1;
-		            			$data = mysqli_query($koneksi,"select * from tb_berita order by tgl_ambil desc");
+		            			$data = mysqli_query($koneksi,"select * from $table order by tgl_ambil desc");
 		            			while($d = mysqli_fetch_array($data)){
 			      			?>
                     			<tr>
-                      				<td><?php echo $no++; ?></td>
-                      				<td><?php echo $d['url']; ?></td>
+                      				<td><?php echo $no; ?></td>
+                      				<td><a target="_blank" href="<?php echo $d['url']; ?>"><?php echo substr(strip_tags($d['url']), 0, 64); ?>...</a></td>
                       				<td><?php echo $d['judul']; ?></td>
-                      				<td><?php echo substr(strip_tags($d['isi']), 0, 256); ?>.......</td>
+                      				<td><?php echo substr(strip_tags($d['isi']), 0, 128); ?>.......</td>
                       				<td><?php echo $d['kategori']; ?></td>
                       				<td><?php echo $d['tgl_ambil']; ?></td>
+                      				<td style="text-align:center">
+									  	<button style="margin:6px" class="btn btn-primary" data-toggle="modal" data-target="#myModal" data-id="<?php echo $d['id']; ?>">
+									  		<i class="fa fa-eye" aria-hidden="true"></i>
+										</button>
+										<form action="php/aksi.php" method="post" onsubmit="return confirm('Hapus data berita <?php echo $d['judul'];?>');">
+											<input type="text" name="id" hidden value="<?php echo $d['id']; ?>">
+											<button style="margin:6px" class="btn btn-danger" name="hapus" type="submit" value="hapus">
+									  			<i class="fa fa-trash" aria-hidden="true"></i>
+											</button>
+										</form>
+									</td>
                     			</tr>
-                   			<?php }?>
+							<?php 
+								$no++;
+								}
+							?>
                   			</tbody>
                 		</table>
 					</div>
@@ -201,7 +213,14 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 			<p class="back-link">Lumino Theme by <a href="https://www.medialoot.com">Medialoot</a></p>
 		</div>
 	</div>	<!--/.main-->
-	
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" role="dialog">
+    	<div class="modal-dialog" id="fetched-data">
+      		
+		</div>
+	</div>
+
 	<script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
 	<script src="js/chart.min.js"></script>
@@ -216,6 +235,18 @@ $entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, coun
 	   $('#dataTable').DataTable({
         "scrollX": true
        });
+	   $('#myModal').on('show.bs.modal', function (e) {
+            var rowid = $(e.relatedTarget).data('id');
+            //menggunakan fungsi ajax untuk pengambilan data
+            $.ajax({
+                type : 'get',
+                url : 'pg/beritaView.php',
+                data :  'id='+ rowid,
+                success : function(data){
+                    $('#fetched-data').html(data);//menampilkan data ke dalam modal
+                }
+            });
+        });
 	} );
 </script>
 		

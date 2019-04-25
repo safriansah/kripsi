@@ -4,29 +4,27 @@ class crawl{
     var $kategori;
     var $kategoriUrl;
     var $existUrl;
+    var $table;
 
-    function __construct(){
-        $host="localhost";
-        $user="root";
-        $pass="";
-        $db="db_kripsi";
-		$this->koneksi = mysqli_connect($host, $user, $pass, $db);
+    function setKoneksi($koneksi, $table){
+        $this->koneksi=$koneksi;
+        $this->table=$table;
     }
     
     function hapusBerita($id){
-        $query="delete from tb_berita where id='$id'";
+        $query="delete from $this->table where id='$id'";
         $hasil="Data gagal dihapus";
         if(mysqli_query($this->koneksi, $query)) $hasil="Data berhasil dihapus";
         echo (" <script>
                     window.alert('$hasil');
-                    window.location.href='../neo.php';
+                    window.location.href='../';
                 </script>");
     }
 
     function crawlBerita($kategori){
         $this->kategori=$kategori;
         $this->existUrl="";
-        $data = mysqli_query($this->koneksi,"select url from tb_berita where kategori='".$kategori."'");
+        $data = mysqli_query($this->koneksi,"select url from $this->table where kategori='".$kategori."'");
         while($d = mysqli_fetch_array($data)){
             $this->existUrl.=$d['url']." ";
         }
@@ -40,7 +38,7 @@ class crawl{
         else $hasil=$this->getUrl();
         echo (" <script>
                     window.alert('Berhasil mendapatkan $hasil berita pada kategori $kategori');
-                    window.location.href='../neo.php';
+                    window.location.href='../';
                 </script>");
     }
 
@@ -99,14 +97,14 @@ class crawl{
         }
         $isi = str_replace("'"," ",$isi);
         $isi = str_replace('"',' ',$isi);
-        $query="insert into tb_berita values('','$url','$judul','$isi','$this->kategori',NOW())";
+        $query="insert into $this->table values('','$url','$judul','$isi','$this->kategori',NOW())";
         return $query;
     }
 
     function getEkonomi(){
         $halaman=1;
         $jumlah=0;
-        while($jumlah<10){
+        while($jumlah<7){
             $kodeHTML =  file_get_contents($this->kategoriUrl.$halaman);
             $pecah = explode('<div class="terkini__post">', $kodeHTML);
             $i=0;
