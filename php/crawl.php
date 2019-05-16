@@ -10,6 +10,16 @@ class crawl{
         $this->koneksi=$koneksi;
         $this->table=$table;
     }
+
+    function getJumlahKategori($kategori){
+        $data=mysqli_fetch_array(mysqli_query($this->koneksi,"SELECT kategori, count(*)as jumlah FROM $this->table where kategori='$kategori'"));
+        return $data['jumlah'];
+    }
+
+    function getJumlahBerita(){
+        $data=mysqli_fetch_array(mysqli_query($this->koneksi,"SELECT kategori, count(*)as jumlah FROM $this->table"));
+        return $data['jumlah'];
+    }
     
     function hapusBerita($id){
         $query="delete from $this->table where id='$id'";

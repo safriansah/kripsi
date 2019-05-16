@@ -1,10 +1,5 @@
 <?php 
 include 'php/koneksi.php';
-$ekonomi = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table where kategori='ekonomi'"));
-$olahraga = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table where kategori='olahraga'"));	
-$teknologi = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table where kategori='teknologi'"));	
-$entertainment = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table where kategori='entertainment'"));
-$beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(*)as jumlah FROM $table"));
 ?>
 <!DOCTYPE html>
 <html>
@@ -16,6 +11,7 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/datepicker3.css" rel="stylesheet">
 	<link href="css/styles.css" rel="stylesheet">
+	<link rel='shortcut icon' type='image/x-icon' href='img/logo.ico' />
 	
 	<!--Custom Font-->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
@@ -76,7 +72,7 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
 				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
 					<div class="panel panel-teal panel-widget border-right">
 						<div class="row no-padding"><em class="fa fa-xl fa-money color-teal"></em>
-							<div class="large"><?php echo $ekonomi['jumlah']; ?></div>
+							<div class="large"><?php echo $crawler->getJumlahKategori("ekonomi"); ?></div>
 							<div class="text-muted">Ekonomi</div>
 						</div>
 					</div>
@@ -84,7 +80,7 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
 				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
 					<div class="panel panel-blue panel-widget border-right">
 						<div class="row no-padding"><em class="fa fa-xl fa-futbol-o color-blue"></em>
-							<div class="large"><?php echo $olahraga['jumlah']; ?></div>
+							<div class="large"><?php echo $crawler->getJumlahKategori("olahraga"); ?></div>
 							<div class="text-muted">Olahraga</div>
 						</div>
 					</div>
@@ -92,7 +88,7 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
 				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
 					<div class="panel panel-orange panel-widget border-right">
 						<div class="row no-padding"><em class="fa fa-xl fa-power-off color-red"></em>
-							<div class="large"><?php echo $teknologi['jumlah']; ?></div>
+							<div class="large"><?php echo $crawler->getJumlahKategori("teknologi"); ?></div>
 							<div class="text-muted">Teknologi</div>
 						</div>
 					</div>
@@ -100,7 +96,7 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
 				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
 					<div class="panel panel-red panel-widget ">
 						<div class="row no-padding"><em class="fa fa-xl fa-users color-orange"></em>
-							<div class="large"><?php echo $entertainment['jumlah']; ?></div>
+							<div class="large"><?php echo $crawler->getJumlahKategori("entertainment"); ?></div>
 							<div class="text-muted">Entertainment</div>
 						</div>
 					</div>
@@ -144,7 +140,7 @@ $beritaTotal = mysqli_fetch_array(mysqli_query($koneksi,"SELECT kategori, count(
 			<div class="col-md-12">
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						Tabel Berita
+						Tabel Berita (<?php echo $crawler->getJumlahBerita(); ?> Berita)
 						<!--<span class="pull-right clickable panel-toggle panel-button-tab-left">
 							<em class="fa fa-toggle-up"></em>
 						</span>-->
