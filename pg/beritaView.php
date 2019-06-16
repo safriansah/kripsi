@@ -1,8 +1,7 @@
 <?php
     include'../php/koneksi.php';
     $id=$_GET['id'];
-	$data = mysqli_query($koneksi,"select * from $table where id='$id'");
-    $d = mysqli_fetch_array($data);
+	$d=$crawler->viewBerita($id);
 ?>
 <!-- Modal content-->
 <div class="modal-content">

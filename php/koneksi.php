@@ -2,7 +2,7 @@
 $host="localhost";
 $user="root";
 $pass="";
-$db="db_kripsi";
+$db="db_kripsi_dummy";
 $table="tb_berita";
 
 $koneksi = mysqli_connect($host, $user, $pass, $db);

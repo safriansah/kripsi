@@ -21,6 +21,22 @@ class crawl{
         return $data['jumlah'];
     }
     
+    function getAllBerita(){
+        $no = 0;
+		$data = mysqli_query($this->koneksi,"select * from $this->table order by tgl_ambil desc");
+		while($d = mysqli_fetch_array($data)){
+		    $result[$no]=$d;
+		    $no++;
+		}
+        return $result;
+    }
+    
+    function viewBerita($id){
+        $data = mysqli_query($this->koneksi,"select * from $this->table where id='$id'");
+        $d = mysqli_fetch_array($data);
+        return $d;
+    }
+    
     function hapusBerita($id){
         $query="delete from $this->table where id='$id'";
         $hasil="Data gagal dihapus";

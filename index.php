@@ -1,5 +1,6 @@
 <?php 
 include 'php/koneksi.php';
+$data=$crawler->getAllBerita();
 ?>
 <!DOCTYPE html>
 <html>
@@ -172,8 +173,7 @@ include 'php/koneksi.php';
                   			<tbody>
                   			<?php
 		            			$no = 1;
-		            			$data = mysqli_query($koneksi,"select * from $table order by tgl_ambil desc");
-		            			while($d = mysqli_fetch_array($data)){
+		            			foreach($data as $d){
 			      			?>
                     			<tr>
                       				<td><?php echo $no; ?></td>
